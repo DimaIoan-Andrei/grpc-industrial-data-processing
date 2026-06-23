@@ -1,4 +1,4 @@
-# gRPC Industrial Data Processing Microservices
+# Distributed microservices-based gRPC architecture for processed and monitored industrial data
 
 This project is a proof-of-concept distributed architecture for processing and monitoring heterogeneous industrial data using Python microservices, gRPC, PostgreSQL, Docker Compose and Prometheus.
 
