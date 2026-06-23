@@ -1,0 +1,5 @@
+grpcio
+prometheus-client
+psycopg2-binary
+protobuf
+sqlalchemy

@@ -1,0 +1,15 @@
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "ingestion-service"
+    static_configs:
+      - targets: ["ingestion-service:8000"]
+
+  - job_name: "historian-service"
+    static_configs:
+      - targets: ["historian-service:9101"]
+
+  - job_name: "alarm-service"
+    static_configs:
+      - targets: ["alarm-service:9102"]

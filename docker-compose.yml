@@ -1,0 +1,95 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-factory_historian}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  historian-service:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: historian_service/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-factory_historian}
+      HISTORIAN_METRICS_PORT: ${HISTORIAN_METRICS_PORT:-9101}
+    ports:
+      - "${HISTORIAN_GRPC_PORT:-50051}:50051"
+      - "${HISTORIAN_METRICS_PORT:-9101}:9101"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  alarm-service:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: alarm_service/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-factory_historian}
+      ALARM_METRICS_PORT: ${ALARM_METRICS_PORT:-9102}
+    ports:
+      - "${ALARM_GRPC_PORT:-50052}:50052"
+      - "${ALARM_METRICS_PORT:-9102}:9102"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  ingestion-service:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: ingestion_service/Dockerfile
+    environment:
+      HISTORIAN_GRPC_TARGET: ${HISTORIAN_GRPC_TARGET:-historian-service:50051}
+      ALARM_GRPC_TARGET: ${ALARM_GRPC_TARGET:-alarm-service:50052}
+      INGESTION_API_TOKEN: ${INGESTION_API_TOKEN:-dev-source-token}
+    ports:
+      - "${INGESTION_PORT:-8000}:8000"
+    depends_on:
+      - historian-service
+      - alarm-service
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  simulator-service:
+    profiles:
+      - simulation
+    build:
+      context: .
+      dockerfile: simulator/Dockerfile
+    environment:
+      INGESTION_URL: ${INGESTION_URL:-http://ingestion-service:8000/ingest/external}
+      INGESTION_API_TOKEN: ${INGESTION_API_TOKEN:-dev-source-token}
+    depends_on:
+      ingestion-service:
+        condition: service_healthy
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+      - ingestion-service
+      - historian-service
+      - alarm-service
+
+volumes:
+  postgres-data:

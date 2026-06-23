@@ -1,0 +1,22 @@
+﻿{
+  "schema_type": "vendor_reactor_v1",
+  "device": {
+    "id": "reactor_01",
+    "type": "chemical_reactor"
+  },
+  "telemetry": {
+    "time": "2026-04-29T13:36:23.633407+00:00",
+    "temperatureCelsius": 82.356,
+    "pressureBar": 3.447,
+    "processValue": 83.556,
+    "outputPercent": 59.164,
+    "setpointCelsius": 85.0
+  },
+  "status": {
+    "quality": "GOOD",
+    "state": "RUNNING",
+    "mode": "AUTO",
+    "batch": "BATCH-001"
+  },
+  "sequence": 10
+}

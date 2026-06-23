@@ -1,0 +1,23 @@
+﻿{
+  "schema_type": "opcua_tank_gateway",
+  "nodeId": "ns=2;s=Tank01",
+  "source": {
+    "id": "tank_01",
+    "line": "LINE_1"
+  },
+  "timestamp": "2026-04-29T13:36:29.633407+00:00",
+  "data": {
+    "Process.TankTemp": 24.235,
+    "Process.LinePressure": 1.256,
+    "Process.LevelPct": 72.339,
+    "Controller.PV": 72.227,
+    "Controller.MV": 33.52
+  },
+  "meta": {
+    "quality": "GOOD",
+    "state": "STABLE",
+    "product": "PROCESS_WATER",
+    "event": "normal",
+    "sequence": 8
+  }
+}

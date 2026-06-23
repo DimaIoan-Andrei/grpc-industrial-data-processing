@@ -1,0 +1,22 @@
+﻿{
+  "schema_type": "vendor_compressor_v2",
+  "assetId": "compressor_01",
+  "sentAt": "2026-04-29T13:36:24.633407+00:00",
+  "telemetry": [
+    {"tag": "TEMP", "value": 77.398},
+    {"tag": "PRESS", "value": 6.762},
+    {"tag": "PV", "value": 72.115},
+    {"tag": "OP", "value": 90.0},
+    {"tag": "RPM", "value": 2090.6}
+  ],
+  "deviceState": "OVERLOADED",
+  "control": {
+    "mode": "AUTO",
+    "area": "COMP_AREA_A"
+  },
+  "health": {
+    "qualityCode": "SUSPECT",
+    "eventCode": "overload"
+  },
+  "sequenceNumber": 17
+}

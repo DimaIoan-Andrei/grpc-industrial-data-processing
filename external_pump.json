@@ -1,0 +1,20 @@
+﻿{
+  "schema_type": "vendor_pump_v1",
+  "pump": {
+    "id": "pump_01",
+    "area": "PUMP_AREA_B"
+  },
+  "readings": {
+    "flowRateM3h": 15.5,
+    "pressureBar": 5.4,
+    "vibrationMmS": 7.2,
+    "motorCurrentA": 19.3
+  },
+  "status": {
+    "quality": "SUSPECT",
+    "state": "DEGRADED",
+    "event": "high_vibration"
+  },
+  "timestamp": "2026-05-08T16:40:00+00:00",
+  "sequence": 1
+}

@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+pydantic
+grpcio
+protobuf
+prometheus-client

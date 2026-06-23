@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "normalized.proto";
+
+message AlarmMessage {
+  string code = 1;
+  string severity = 2;
+  string message = 3;
+}
+
+message AlarmEvaluationResponse {
+  string source_id = 1;
+  int32 alarm_count = 2;
+  repeated AlarmMessage alarms = 3;
+}
+
+service AlarmService {
+  rpc EvaluateAlarms(NormalizedRecordMessage) returns (AlarmEvaluationResponse);
+}

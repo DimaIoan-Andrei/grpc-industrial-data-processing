@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+message NormalizedRecordMessage {
+  string source_id = 1;
+  string source_type = 2;
+  string protocol_hint = 3;
+  string event_time = 4;
+  string quality = 5;
+  string event_type = 6;
+  int32 sequence_no = 7;
+  map<string, double> measurements = 8;
+  map<string, string> attributes = 9;
+}
+
+message StoreNormalizedRecordResponse {
+  string status = 1;
+  string message = 2;
+}
+
+service HistorianService {
+  rpc StoreNormalizedRecord(NormalizedRecordMessage) returns (StoreNormalizedRecordResponse);
+}
